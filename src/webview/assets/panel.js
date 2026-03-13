@@ -1,0 +1,259 @@
+// @ts-nocheck
+// Antigravity History — Conversation Manager Frontend Logic
+
+(function () {
+  /** @type {ReturnType<typeof acquireVsCodeApi>} */
+  const vscode = acquireVsCodeApi();
+
+  // ── DOM refs ──
+  const searchInput = document.getElementById('search-input');
+  const refreshBtn = document.getElementById('btn-refresh');
+  const exportAllBtn = document.getElementById('btn-export-all');
+  const statsBar = document.getElementById('stats-bar');
+  const listContainer = document.getElementById('list-container');
+  const toastEl = document.getElementById('toast');
+
+  // ── State ──
+  let conversations = {}; // { cascadeId: summary }
+  let searchQuery = '';
+
+  // ── Init ──
+  refreshBtn.addEventListener('click', () => {
+    vscode.postMessage({ command: 'refresh' });
+    showLoading();
+  });
+
+  exportAllBtn.addEventListener('click', () => {
+    vscode.postMessage({ command: 'exportAll' });
+  });
+
+  searchInput.addEventListener('input', (e) => {
+    searchQuery = e.target.value.toLowerCase();
+    renderList();
+  });
+
+  // ── Receive messages from extension ──
+  window.addEventListener('message', (event) => {
+    const msg = event.data;
+    switch (msg.command) {
+      case 'setConversations':
+        conversations = msg.data || {};
+        renderList();
+        break;
+      case 'recoverProgress':
+        statsBar.textContent = `Syncing conversations... ${msg.done}/${msg.total}`;
+        break;
+      case 'recoverDone':
+        showToast(`Recovered ${msg.activated} conversations ✅`);
+        break;
+      case 'exportProgress':
+        showToast(msg.text);
+        break;
+      case 'exportDone':
+        showToast(msg.text || 'Export complete ✅');
+        break;
+      case 'error':
+        showError(msg.text);
+        break;
+    }
+  });
+
+  // ── Render ──
+  function renderList() {
+    const entries = Object.entries(conversations);
+
+    if (entries.length === 0) {
+      listContainer.innerHTML = getEmptyStateHtml();
+      statsBar.textContent = '';
+      return;
+    }
+
+    // Filter by search
+    const filtered = entries.filter(([_, info]) => {
+      if (!searchQuery) return true;
+      const title = (info.summary || '').toLowerCase();
+      return title.includes(searchQuery);
+    });
+
+    if (filtered.length === 0) {
+      listContainer.innerHTML = getNoResultsHtml(searchQuery);
+      statsBar.textContent = `${entries.length} conversations`;
+      return;
+    }
+
+    // Group by date
+    const groups = groupByDate(filtered);
+    statsBar.textContent = `${filtered.length} of ${entries.length} conversations`;
+
+    let html = '';
+    for (const [groupLabel, items] of groups) {
+      html += `<div class="date-group">`;
+      html += `<div class="date-group-header">${groupLabel} <span class="date-group-count">(${items.length})</span></div>`;
+      for (const [cid, info] of items) {
+        html += renderCard(cid, info);
+      }
+      html += `</div>`;
+    }
+    listContainer.innerHTML = html;
+
+    // Bind card button events
+    listContainer.querySelectorAll('[data-action]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const action = btn.getAttribute('data-action');
+        const cascadeId = btn.getAttribute('data-id');
+        if (action === 'exportMd') {
+          vscode.postMessage({ command: 'export', cascadeId, format: 'md' });
+          showToast('Exporting Markdown...');
+        } else if (action === 'exportJson') {
+          vscode.postMessage({ command: 'export', cascadeId, format: 'json' });
+          showToast('Exporting JSON...');
+        } else if (action === 'copyId') {
+          vscode.postMessage({ command: 'copyId', cascadeId });
+          showToast('Copied!');
+        } else if (action === 'openFolder') {
+          const folderPath = btn.getAttribute('data-path');
+          if (folderPath) {
+            vscode.postMessage({ command: 'openInExplorer', path: folderPath });
+          }
+        }
+      });
+    });
+  }
+
+  function renderCard(cascadeId, info) {
+    const title = info.summary || 'Untitled Conversation';
+    const stepCount = info.stepCount || '?';
+    const time = formatTime(info.lastModifiedTime || info.createdTime);
+    const workspaces = (info.workspaces || [])
+      .map((w) => w.workspaceFolderAbsoluteUri)
+      .filter(Boolean);
+    const wsHtml = workspaces.length > 0
+      ? `<div class="conv-workspace" data-action="openFolder" data-path="${escapeHtml(workspaces[0])}" title="Open in Explorer">📂 ${escapeHtml(workspaces[0])}</div>`
+      : '';
+
+    return `
+      <div class="conv-card" data-cascade-id="${escapeHtml(cascadeId)}">
+        <div class="conv-icon">💬</div>
+        <div class="conv-info">
+          <div class="conv-title" title="${escapeHtml(title)}">${escapeHtml(title)}</div>
+          <div class="conv-meta">${time} · ${stepCount} steps</div>
+          ${wsHtml}
+        </div>
+        <div class="conv-actions">
+          <button class="btn-export" data-action="exportMd" data-id="${escapeHtml(cascadeId)}">MD</button>
+          <button class="btn-export" data-action="exportJson" data-id="${escapeHtml(cascadeId)}">JSON</button>
+          <button class="btn-more" data-action="copyId" data-id="${escapeHtml(cascadeId)}" title="Copy Cascade ID">⋯</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Date grouping ──
+  function groupByDate(entries) {
+    const now = new Date();
+    const todayStr = dateKey(now);
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = dateKey(yesterday);
+
+    const groups = new Map();
+
+    // Sort by time descending
+    entries.sort((a, b) => {
+      const ta = a[1].lastModifiedTime || a[1].createdTime || '';
+      const tb = b[1].lastModifiedTime || b[1].createdTime || '';
+      return tb.localeCompare(ta);
+    });
+
+    for (const entry of entries) {
+      const info = entry[1];
+      const ts = info.lastModifiedTime || info.createdTime || '';
+      let label = 'Earlier';
+      if (ts) {
+        const d = dateKey(new Date(ts));
+        if (d === todayStr) label = 'Today';
+        else if (d === yesterdayStr) label = 'Yesterday';
+        else label = d;
+      }
+      if (!groups.has(label)) groups.set(label, []);
+      groups.get(label).push(entry);
+    }
+    return groups;
+  }
+
+  function dateKey(d) {
+    return d.toISOString().slice(0, 10);
+  }
+
+  function formatTime(ts) {
+    if (!ts) return '–';
+    try {
+      const d = new Date(ts);
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return ts.slice(11, 16) || '–';
+    }
+  }
+
+  // ── Empty states ──
+  function getEmptyStateHtml() {
+    return `
+      <div class="empty-state">
+        <div class="empty-state-icon">🔮</div>
+        <div class="empty-state-title">No Conversations Found</div>
+        <div class="empty-state-desc">Make sure Antigravity is running with an active workspace.</div>
+        <button class="btn btn-primary" onclick="document.getElementById('btn-refresh').click()">🔄 Refresh</button>
+      </div>
+    `;
+  }
+
+  function getNoResultsHtml(query) {
+    return `
+      <div class="empty-state">
+        <div class="empty-state-icon">🔍</div>
+        <div class="empty-state-title">No matches for "${escapeHtml(query)}"</div>
+        <div class="empty-state-desc">Try a different search term.</div>
+      </div>
+    `;
+  }
+
+  function showLoading() {
+    listContainer.innerHTML = `
+      <div class="loading">
+        <div class="spinner"></div>
+        <div>Discovering Antigravity instances...</div>
+      </div>
+    `;
+  }
+
+  function showError(text) {
+    listContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">⚠️</div>
+        <div class="empty-state-title">Error</div>
+        <div class="empty-state-desc">${escapeHtml(text)}</div>
+        <button class="btn btn-primary" onclick="document.getElementById('btn-refresh').click()">🔄 Retry</button>
+      </div>
+    `;
+  }
+
+  // ── Toast ──
+  let toastTimer;
+  function showToast(text) {
+    toastEl.textContent = text;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2500);
+  }
+
+  // ── Utils ──
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ── Auto-refresh on load ──
+  showLoading();
+  vscode.postMessage({ command: 'refresh' });
+})();

@@ -1,0 +1,104 @@
+{
+  "name": "antigravity-history",
+  "displayName": "Antigravity History",
+  "description": "Browse, search, and export your Antigravity AI conversations — with full fidelity. View AI thinking chains, code diffs, and command outputs in a beautiful chat UI.",
+  "version": "0.1.0",
+  "publisher": "neo1027144",
+  "license": "Apache-2.0",
+  "icon": "resources/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neo1027144-creator/antigravity-history-vscode"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "antigravity",
+    "conversation",
+    "history",
+    "export",
+    "ai",
+    "chat",
+    "thinking",
+    "backup"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "aghistory.openPanel",
+        "title": "Open Antigravity History",
+        "icon": "$(history)",
+        "category": "Antigravity History"
+      },
+      {
+        "command": "aghistory.refresh",
+        "title": "Refresh Conversations",
+        "icon": "$(refresh)",
+        "category": "Antigravity History"
+      },
+      {
+        "command": "aghistory.export",
+        "title": "Export Conversation",
+        "icon": "$(cloud-download)",
+        "category": "Antigravity History"
+      },
+      {
+        "command": "aghistory.exportAll",
+        "title": "Export All Conversations",
+        "icon": "$(cloud-download)",
+        "category": "Antigravity History"
+      }
+    ],
+    "configuration": {
+      "title": "Antigravity History",
+      "properties": {
+        "aghistory.exportPath": {
+          "type": "string",
+          "default": "./antigravity_export",
+          "description": "Default export directory path"
+        },
+        "aghistory.exportFormat": {
+          "type": "string",
+          "enum": [
+            "md",
+            "json",
+            "all"
+          ],
+          "default": "md",
+          "description": "Default export format"
+        },
+        "aghistory.fieldLevel": {
+          "type": "string",
+          "enum": [
+            "default",
+            "thinking",
+            "full"
+          ],
+          "default": "thinking",
+          "description": "Export detail level: default (messages only), thinking (+ AI reasoning), full (+ diffs, outputs)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.js --production",
+    "watch": "node esbuild.js --watch",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.3.0"
+  }
+}

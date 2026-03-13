@@ -1,0 +1,247 @@
+/* Antigravity History — Conversation Manager Styles */
+
+/* ── Reset & Base ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--vscode-font-family, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: var(--vscode-font-size, 13px);
+  color: var(--vscode-foreground);
+  background: var(--vscode-editor-background);
+  line-height: 1.5;
+  padding: 16px 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Top Bar ── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 6px 12px;
+  border: 1px solid var(--vscode-input-border, #3c3c3c);
+  border-radius: 6px;
+  background: var(--vscode-input-background, #1e1e1e);
+  color: var(--vscode-input-foreground, #ccc);
+  font-size: 13px;
+  outline: none;
+}
+.search-input:focus {
+  border-color: var(--vscode-focusBorder, #007acc);
+}
+.search-input::placeholder {
+  color: var(--vscode-input-placeholderForeground, #888);
+}
+
+.btn {
+  padding: 5px 12px;
+  border: 1px solid var(--vscode-button-border, transparent);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.85; }
+
+.btn-icon {
+  padding: 5px 8px;
+  background: transparent;
+  color: var(--vscode-foreground);
+  border: 1px solid var(--vscode-input-border, #3c3c3c);
+}
+
+.btn-primary {
+  background: var(--vscode-button-background, #0e639c);
+  color: var(--vscode-button-foreground, #fff);
+}
+.btn-primary:hover {
+  background: var(--vscode-button-hoverBackground, #1177bb);
+}
+
+/* ── Stats Bar ── */
+.stats-bar {
+  font-size: 12px;
+  color: var(--vscode-descriptionForeground, #888);
+  margin-bottom: 16px;
+}
+
+/* ── Date Group ── */
+.date-group {
+  margin-bottom: 16px;
+}
+.date-group-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--vscode-descriptionForeground, #888);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--vscode-panel-border, #2d2d2d);
+}
+.date-group-count {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* ── Conversation Card ── */
+.conv-card {
+  padding: 12px 16px;
+  border: 1px solid var(--vscode-panel-border, #2d2d2d);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: border-color 0.15s, background 0.15s;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.conv-card:hover {
+  border-color: var(--vscode-focusBorder, #007acc);
+  background: var(--vscode-list-hoverBackground, rgba(255,255,255,0.04));
+}
+
+.conv-icon {
+  font-size: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.conv-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.conv-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--vscode-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conv-meta {
+  font-size: 12px;
+  color: var(--vscode-descriptionForeground, #888);
+  margin-top: 2px;
+}
+
+.conv-workspace {
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground, #666);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-left: -4px;
+}
+.conv-workspace:hover {
+  color: var(--vscode-textLink-foreground, #3794ff);
+  background: var(--vscode-list-hoverBackground, rgba(255,255,255,0.04));
+}
+
+.conv-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.btn-export {
+  padding: 3px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  background: var(--vscode-badge-background, #333);
+  color: var(--vscode-badge-foreground, #ccc);
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.btn-export:hover {
+  background: var(--vscode-button-background, #0e639c);
+  color: var(--vscode-button-foreground, #fff);
+}
+
+.btn-more {
+  padding: 3px 6px;
+  background: transparent;
+  border: none;
+  color: var(--vscode-descriptionForeground, #888);
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 4px;
+}
+.btn-more:hover {
+  background: var(--vscode-list-hoverBackground, rgba(255,255,255,0.08));
+}
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--vscode-descriptionForeground, #888);
+}
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+.empty-state-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vscode-foreground);
+  margin-bottom: 8px;
+}
+.empty-state-desc {
+  font-size: 13px;
+  margin-bottom: 16px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Loading ── */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--vscode-descriptionForeground, #888);
+}
+.spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--vscode-panel-border, #444);
+  border-top-color: var(--vscode-focusBorder, #007acc);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  background: var(--vscode-notificationsInfoIcon-foreground, #3794ff);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; }
