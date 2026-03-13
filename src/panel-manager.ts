@@ -270,8 +270,8 @@ function getWebviewHtml(webview: vscode.Webview, extensionUri: vscode.Uri): stri
       <button class="seg-btn" id="btn-expand-all" title="Expand All">▾ Expand</button>
       <button class="seg-btn" id="btn-collapse-all" title="Collapse All">▸ Collapse</button>
     </div>
-    <button class="btn btn-icon" id="btn-refresh" title="Refresh">🔄</button>
-    <button class="btn btn-primary" id="btn-export-all">⬇️ Export All</button>
+    <button class="btn btn-icon" id="btn-refresh" title="Refresh">↻</button>
+    <button class="btn btn-primary" id="btn-export-all">Export All</button>
   </div>
   <div class="stats-bar" id="stats-bar"></div>
   <div id="list-container"></div>
