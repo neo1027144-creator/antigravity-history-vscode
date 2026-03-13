@@ -153,20 +153,17 @@
       ? `<div class="conv-workspace" data-action="openFolder" data-path="${esc(wsPath)}" title="Open workspace in Explorer">📂 ${esc(wsDisplay)}</div>`
       : '';
 
-    // Conversation data file (specific .pb file, not the whole folder)
-    const convFile = convDataDir ? toWinPath(convDataDir + '/' + cascadeId + '.pb') : '';
-    const convFileHtml = convFile
-      ? `<div class="conv-workspace" data-action="openFolder" data-path="${esc(convDataDir)}" title="Open data folder in Explorer">💾 ${esc(convFile)}</div>`
+    // Conversation data — show only folder name, click opens full path
+    const convFileHtml = convDataDir
+      ? `<div class="conv-workspace" data-action="openFolder" data-path="${esc(convDataDir)}" title="${esc(toWinPath(convDataDir))}">💾 ${esc(cascadeId)}</div>`
       : '';
-
-    const createdHtml = created ? `<span class="conv-created">· Created ${esc(created)}</span>` : '';
 
     return `
       <div class="conv-card" data-cascade-id="${esc(cascadeId)}">
         <div class="conv-icon">${statusDot}</div>
         <div class="conv-info">
           <div class="conv-title" title="${esc(title)}">${esc(title)}</div>
-          <div class="conv-meta">${time} · ${stepCount} steps ${createdHtml}</div>
+          <div class="conv-meta">${time} · ${stepCount} steps</div>
           ${wsHtml}
           ${convFileHtml}
         </div>
