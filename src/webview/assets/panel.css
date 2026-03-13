@@ -179,7 +179,7 @@ body {
 .conv-info { flex: 1; min-width: 0; }
 .conv-title {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--vscode-foreground);
   white-space: nowrap;
   overflow: hidden;
