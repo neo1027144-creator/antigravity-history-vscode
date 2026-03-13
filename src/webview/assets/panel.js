@@ -13,12 +13,15 @@
   const toastEl = document.getElementById('toast');
   const groupDateBtn = document.getElementById('group-date');
   const groupWorkspaceBtn = document.getElementById('group-workspace');
+  const expandAllBtn = document.getElementById('btn-expand-all');
+  const collapseAllBtn = document.getElementById('btn-collapse-all');
 
   // ── State ──
   let conversations = {};
   let searchQuery = '';
-  let groupMode = 'date'; // 'date' | 'workspace'
+  let groupMode = 'date';
   let collapsedGroups = new Set();
+  let convDataDir = '';
 
   // ── Init ──
   refreshBtn.addEventListener('click', () => {
@@ -51,12 +54,22 @@
     renderList();
   });
 
+  // Expand / Collapse all
+  expandAllBtn.addEventListener('click', () => { collapsedGroups.clear(); renderList(); });
+  collapseAllBtn.addEventListener('click', () => {
+    listContainer.querySelectorAll('.date-group-header').forEach((h) => {
+      collapsedGroups.add(h.getAttribute('data-group'));
+    });
+    renderList();
+  });
+
   // ── Receive messages from extension ──
   window.addEventListener('message', (event) => {
     const msg = event.data;
     switch (msg.command) {
       case 'setConversations':
         conversations = msg.data || {};
+        if (msg.convDir) { convDataDir = msg.convDir; }
         renderList();
         break;
       case 'recoverProgress':
@@ -134,8 +147,15 @@
     const workspaces = (info.workspaces || [])
       .map((w) => w.workspaceFolderAbsoluteUri)
       .filter(Boolean);
-    const wsHtml = workspaces.length > 0
-      ? `<div class="conv-workspace" data-action="openFolder" data-path="${esc(workspaces[0])}" title="Open in Explorer">📂 ${esc(workspaces[0])}</div>`
+    const wsPath = workspaces.length > 0 ? workspaces[0] : '';
+    const wsDisplay = stripFileUri(wsPath);
+    const wsHtml = wsPath
+      ? `<div class="conv-workspace" data-action="openFolder" data-path="${esc(wsPath)}" title="Open workspace in Explorer">📂 ${esc(wsDisplay)}</div>`
+      : '';
+
+    const convDir = convDataDir;
+    const convDirHtml = convDir
+      ? `<div class="conv-workspace" data-action="openFolder" data-path="${esc(convDir)}" title="Open data folder in Explorer">💾 ${esc(convDir)}</div>`
       : '';
 
     const createdHtml = created ? `<span class="conv-created">· Created ${esc(created)}</span>` : '';
@@ -147,11 +167,12 @@
           <div class="conv-title" title="${esc(title)}">${esc(title)}</div>
           <div class="conv-meta">${time} · ${stepCount} steps ${createdHtml}</div>
           ${wsHtml}
+          ${convDirHtml}
         </div>
         <div class="conv-actions">
           <button class="btn-export" data-action="exportMd" data-id="${esc(cascadeId)}">MD</button>
           <button class="btn-export" data-action="exportJson" data-id="${esc(cascadeId)}">JSON</button>
-          <button class="btn-copy" data-action="copyId" data-id="${esc(cascadeId)}" title="Copy Cascade ID">📋</button>
+          <button class="btn-export" data-action="copyId" data-id="${esc(cascadeId)}" title="Copy Cascade ID">ID</button>
         </div>
       </div>
     `;
@@ -247,7 +268,7 @@
       const ws = (entry[1].workspaces || [])
         .map((w) => w.workspaceFolderAbsoluteUri)
         .filter(Boolean);
-      const label = ws.length > 0 ? ws[0] : 'No Workspace';
+      const label = ws.length > 0 ? stripFileUri(ws[0]) : 'No Workspace';
       if (!groups.has(label)) groups.set(label, []);
       groups.get(label).push(entry);
     }
@@ -344,6 +365,11 @@
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  function stripFileUri(uri) {
+    if (!uri) return '';
+    return decodeURIComponent(uri.replace(/^file:\/\/\//, ''));
   }
 
   // ── Auto-refresh on load ──

@@ -103,7 +103,7 @@ async function handleRefresh(): Promise<void> {
     const cached = readCache();
     if (Object.keys(cached).length > 0 && Object.keys(cachedConversations).length === 0) {
       cachedConversations = cached;
-      postMessage({ command: 'setConversations', data: cachedConversations });
+      postMessage({ command: 'setConversations', data: cachedConversations, convDir: getConvDir() });
     }
 
     // Step 1: Discover LS instances and get indexed conversations
@@ -111,7 +111,7 @@ async function handleRefresh(): Promise<void> {
     cachedEndpointMap = result.cascadeToEndpoint;
     cachedConversations = { ...cachedConversations, ...result.conversations };
 
-    postMessage({ command: 'setConversations', data: cachedConversations });
+    postMessage({ command: 'setConversations', data: cachedConversations, convDir: getConvDir() });
 
     // Step 2: Auto-recover unindexed conversations
     if (result.endpoints.length > 0) {
@@ -130,7 +130,7 @@ async function handleRefresh(): Promise<void> {
         const refreshed = await discoverAndListAll();
         cachedEndpointMap = refreshed.cascadeToEndpoint;
         cachedConversations = { ...cachedConversations, ...refreshed.conversations };
-        postMessage({ command: 'setConversations', data: cachedConversations });
+        postMessage({ command: 'setConversations', data: cachedConversations, convDir: getConvDir() });
         postMessage({ command: 'recoverDone', activated: recovery.activated, total: recovery.total });
       }
     }
@@ -241,6 +241,10 @@ function resolveExportPath(configPath: string): string {
   return path.resolve(wsFolder || process.cwd(), configPath);
 }
 
+function getConvDir(): string {
+  return path.join(require('os').homedir(), '.gemini', 'antigravity', 'conversations');
+}
+
 function getWebviewHtml(webview: vscode.Webview, extensionUri: vscode.Uri): string {
   const cssUri = webview.asWebviewUri(
     vscode.Uri.joinPath(extensionUri, 'dist', 'webview', 'panel.css'),
@@ -266,6 +270,8 @@ function getWebviewHtml(webview: vscode.Webview, extensionUri: vscode.Uri): stri
       <button class="seg-btn active" id="group-date">📅 Date</button>
       <button class="seg-btn" id="group-workspace">📂 Workspace</button>
     </div>
+    <button class="btn btn-icon" id="btn-expand-all" title="Expand All">▾</button>
+    <button class="btn btn-icon" id="btn-collapse-all" title="Collapse All">▸</button>
     <button class="btn btn-icon" id="btn-refresh" title="Refresh">🔄</button>
     <button class="btn btn-primary" id="btn-export-all">⬇️ Export All</button>
   </div>
