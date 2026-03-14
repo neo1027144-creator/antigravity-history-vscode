@@ -22,11 +22,15 @@
 - Collapsible groups with expand/collapse all
 - Conversation stats: step count, timestamps, status indicator
 
+![Search & Filter](docs/screenshots/search.png)
+
 ### 📦 One-Click Export
 - Export individual conversations as **Markdown** or **JSON**
 - **Bulk export** all conversations with one click
 - Configurable export path with visual path selector
 - Export completion notification with "Open Folder" action
+
+![Export in Action](docs/screenshots/export.png)
 
 ### 🔄 Auto Recovery
 - Automatically discovers and recovers **unindexed conversations** from disk
@@ -103,11 +107,15 @@ Apache 2.0 — see [LICENSE](LICENSE)
 - 可折叠分组，一键展开/收起
 - 对话信息：步数、时间、状态指示
 
+![搜索与过滤](docs/screenshots/search.png)
+
 ### 📦 一键导出
 - 单条导出为 **Markdown** 或 **JSON**
 - **批量导出**所有对话
 - 可视化导出路径选择器，支持自定义导出目录
 - 导出完成后可直接打开文件夹
+
+![导出功能](docs/screenshots/export.png)
 
 ### 🔄 自动恢复
 - 自动发现并恢复**未索引的对话**（从磁盘 `.pb` 文件）
