@@ -6,9 +6,13 @@
 
 **Browse, search, and export your Antigravity AI conversations — right inside your IDE.**
 
+> *Every conversation is worth keeping. Don't let a single insight slip away.*
+
 [中文说明](#中文说明) | [English](#features)
 
 ---
+
+![Dashboard Overview](docs/screenshots/dashboard.png)
 
 ## Features
 
@@ -86,6 +90,10 @@ Apache 2.0 — see [LICENSE](LICENSE)
 # 中文说明
 
 **在 IDE 内浏览、搜索和导出你的 Antigravity AI 对话记录。**
+
+> *每一段对话都值得留存，别让任何灵感悄然溜走。*
+
+![面板预览](docs/screenshots/dashboard.png)
 
 ## 功能特性
 
