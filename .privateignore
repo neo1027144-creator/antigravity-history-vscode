@@ -8,6 +8,7 @@ src/ls-client.ts
 src/parser.ts
 src/recovery.ts
 src/panel-manager.ts
+esbuild.js
 
 # Git internals
 .git/
