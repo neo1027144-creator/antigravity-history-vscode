@@ -3,3 +3,9 @@ dist/
 *.vsix
 .vscode-test/
 out/
+
+# Core modules (closed source)
+src/discovery.ts
+src/ls-client.ts
+src/parser.ts
+src/recovery.ts
