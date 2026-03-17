@@ -46,6 +46,6 @@ jobs:
           external_repository: neo1027144-creator/antigravity-history-vscode
           publish_branch: master
           publish_dir: /tmp/public
-          force_orphan: true
+          force_orphan: false
           keep_files: false
-          commit_message: "update source"
+          commit_message: ${{ github.event.head_commit.message }}

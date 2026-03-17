@@ -27,33 +27,29 @@ function obfuscateBundle() {
 
   console.log('[obfuscate] Starting deep obfuscation...');
   const result = JavaScriptObfuscator.obfuscate(code, {
-    // --- Control flow ---
-    controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 0.5,
-    deadCodeInjection: true,
-    deadCodeInjectionThreshold: 0.2,
+    // --- Control flow (DISABLED - breaks async/await in Node.js) ---
+    controlFlowFlattening: false,
+    deadCodeInjection: false,
 
-    // --- String protection ---
+    // --- String protection (CORE - hides API paths, method names) ---
     stringArray: true,
     stringArrayEncoding: ['rc4'],
     stringArrayThreshold: 0.75,
-    splitStrings: true,
-    splitStringsChunkLength: 8,
+    splitStrings: false,
 
     // --- Identifier mangling ---
     identifierNamesGenerator: 'hexadecimal',
     renameGlobals: false,  // keep module.exports intact
 
-    // --- Anti-debug ---
-    selfDefending: true,
-    debugProtection: false,  // can lock up VS Code, keep off
+    // --- Anti-debug (DISABLED - crashes in VS Code) ---
+    selfDefending: false,
+    debugProtection: false,
 
     // --- Misc ---
-    transformObjectKeys: true,
-    unicodeEscapeSequence: false,  // keep bundle size reasonable
+    transformObjectKeys: false,  // can break dynamic key access
+    unicodeEscapeSequence: false,
     compact: true,
     simplify: true,
-    log: false,
 
     // --- Target ---
     target: 'node',
