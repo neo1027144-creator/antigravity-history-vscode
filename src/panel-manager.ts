@@ -265,6 +265,16 @@ async function handleExportAll(): Promise<void> {
     return;
   }
 
+  // Guard: if endpoints not yet discovered (user clicked too fast), auto-refresh first
+  if (Object.keys(cachedEndpointMap).length === 0) {
+    vscode.window.showInformationMessage('Waiting for LS discovery to complete...');
+    await handleRefresh();
+    if (Object.keys(cachedEndpointMap).length === 0) {
+      vscode.window.showErrorMessage('No LS endpoint available. Is Antigravity running?');
+      return;
+    }
+  }
+
   const config = vscode.workspace.getConfiguration('aghistory');
   const exportFormat = config.get<string>('exportFormat', 'all');
   const fieldLevel = config.get<string>('fieldLevel', 'thinking') as FieldLevel;
