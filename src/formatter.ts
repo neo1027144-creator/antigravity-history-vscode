@@ -160,19 +160,28 @@ export function safeFilename(title: string, maxLen = 60): string {
   return title.replace(/[^\w\s\-]/g, '_').slice(0, maxLen).trim();
 }
 
+/** Generate a timestamp string like '20260317_141955' */
+export function getTimestamp(): string {
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+}
+
 export function writeConversation(
   content: string,
   title: string,
   outputDir: string,
   extension = '.md',
+  timestamp?: string,
 ): string {
   const base = safeFilename(title);
-  let filepath = path.join(outputDir, base + extension);
+  const suffix = timestamp ? `_${timestamp}` : '';
+  let filepath = path.join(outputDir, base + suffix + extension);
 
   // Deduplicate
   let counter = 2;
   while (fs.existsSync(filepath)) {
-    filepath = path.join(outputDir, `${base}_${counter}${extension}`);
+    filepath = path.join(outputDir, `${base}${suffix}_${counter}${extension}`);
     counter++;
   }
 

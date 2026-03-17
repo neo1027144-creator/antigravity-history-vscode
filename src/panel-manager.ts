@@ -19,6 +19,7 @@ import {
   formatJson,
   writeConversation,
   safeFilename,
+  getTimestamp,
 } from './formatter.js';
 
 let currentPanel: vscode.WebviewPanel | undefined;
@@ -187,7 +188,7 @@ async function handleRefresh(): Promise<void> {
   }
 }
 
-async function handleExport(cascadeId: string, format: string): Promise<void> {
+async function handleExport(cascadeId: string, format: string, overrideDir?: string, overrideTs?: string): Promise<void> {
   // Try specific endpoint first, fallback to any available endpoint
   let ep: { port: number; csrf: string } | undefined = cachedEndpointMap[cascadeId];
   if (!ep) {
@@ -200,9 +201,12 @@ async function handleExport(cascadeId: string, format: string): Promise<void> {
   }
 
   const config = vscode.workspace.getConfiguration('aghistory');
-  const exportPath = config.get<string>('exportPath', './antigravity_export');
   const fieldLevel = config.get<string>('fieldLevel', 'thinking') as FieldLevel;
-  const outputDir = resolveExportPath(exportPath);
+  const ts = overrideTs || getTimestamp();
+  const outputDir = overrideDir || path.join(
+    resolveExportPath(config.get<string>('exportPath', './antigravity_export')),
+    `export_${ts}`,
+  );
 
   try {
     const steps = await getTrajectorySteps(ep.port, ep.csrf, cascadeId);
@@ -215,13 +219,13 @@ async function handleExport(cascadeId: string, format: string): Promise<void> {
 
     if (format === 'md' || format === 'all') {
       const md = formatMarkdown(title, cascadeId, metadata, messages);
-      const mdPath = writeConversation(md, title, outputDir, '.md');
+      const mdPath = writeConversation(md, title, outputDir, '.md', ts);
       postMessage({ command: 'exportDone', text: `Exported: ${path.basename(mdPath)}` });
     }
     if (format === 'json' || format === 'all') {
       const record = buildConversationRecord(cascadeId, title, metadata, messages);
       const jsonStr = formatJson([record]);
-      const jsonPath = writeConversation(jsonStr, title, outputDir, '.json');
+      const jsonPath = writeConversation(jsonStr, title, outputDir, '.json', ts);
       postMessage({ command: 'exportDone', text: `Exported: ${path.basename(jsonPath)}` });
     }
   } catch (e) {
@@ -240,7 +244,8 @@ async function handleExportAll(): Promise<void> {
   const exportFormat = config.get<string>('exportFormat', 'md');
   const fieldLevel = config.get<string>('fieldLevel', 'thinking') as FieldLevel;
   const exportPath = config.get<string>('exportPath', './antigravity_export');
-  const outputDir = resolveExportPath(exportPath);
+  const ts = getTimestamp();
+  const outputDir = path.join(resolveExportPath(exportPath), `export_${ts}`);
 
   await vscode.window.withProgress(
     {
@@ -261,7 +266,7 @@ async function handleExportAll(): Promise<void> {
         });
 
         try {
-          await handleExport(cid, exportFormat);
+          await handleExport(cid, exportFormat, outputDir, ts);
         } catch {
           // Skip failed exports silently
         }
