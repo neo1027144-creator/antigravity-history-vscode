@@ -21,6 +21,7 @@ import {
   safeFilename,
   getTimestamp,
 } from './formatter.js';
+import type { ConversationRecord } from './formatter.js';
 
 let currentPanel: vscode.WebviewPanel | undefined;
 let cachedEndpointMap: Record<string, { port: number; csrf: string }> = {};
@@ -96,6 +97,13 @@ export function openPanel(context: vscode.ExtensionContext): void {
           const config = vscode.workspace.getConfiguration('aghistory');
           const ep = resolveExportPath(config.get<string>('exportPath', './antigravity_export'));
           vscode.env.openExternal(vscode.Uri.file(ep));
+          break;
+        }
+        case 'setFieldLevel': {
+          const val = message.value;
+          if (['default', 'thinking', 'full'].includes(val)) {
+            await vscode.workspace.getConfiguration('aghistory').update('fieldLevel', val, true);
+          }
           break;
         }
       }
@@ -191,7 +199,7 @@ async function handleRefresh(): Promise<void> {
 async function handleExport(
   cascadeId: string, format: string,
   overrideDir?: string, overrideTs?: string,
-  jsonCollector?: Record<string, unknown>[],
+  jsonCollector?: ConversationRecord[],
 ): Promise<void> {
   // Try specific endpoint first, fallback to any available endpoint
   let ep: { port: number; csrf: string } | undefined = cachedEndpointMap[cascadeId];
@@ -200,8 +208,7 @@ async function handleExport(
     if (anyId) { ep = cachedEndpointMap[anyId]; }
   }
   if (!ep) {
-    vscode.window.showErrorMessage('No LS endpoint available. Try refreshing.');
-    return;
+    throw new Error('No LS endpoint available. Try refreshing.');
   }
 
   const config = vscode.workspace.getConfiguration('aghistory');
@@ -213,7 +220,12 @@ async function handleExport(
   );
 
   try {
+    console.log(`[AG-DEBUG] handleExport cid=${cascadeId.slice(0, 8)} format=${format} dir=${outputDir}`);
     const steps = await getTrajectorySteps(ep.port, ep.csrf, cascadeId);
+    console.log(`[AG-DEBUG] got ${steps?.length ?? 0} steps for ${cascadeId.slice(0, 8)}`);
+    if (!steps || steps.length === 0) {
+      throw new Error(`No steps returned for ${cascadeId.slice(0, 8)} (API may be unavailable)`);
+    }
     const messages = parseSteps(steps, fieldLevel);
 
     const cached = cachedConversations[cascadeId];
@@ -223,22 +235,26 @@ async function handleExport(
     if (format === 'md' || format === 'all') {
       const md = formatMarkdown(title, cascadeId, metadata, messages);
       const mdPath = writeConversation(md, title, outputDir, '.md', ts);
+      console.log(`[AG-DEBUG] wrote MD: ${mdPath}`);
       postMessage({ command: 'exportDone', text: `Exported: ${path.basename(mdPath)}` });
     }
     if (format === 'json' || format === 'all') {
       const record = buildConversationRecord(cascadeId, title, metadata, messages);
       if (jsonCollector) {
         // Batch mode: collect into array, write combined file later
-        jsonCollector.push(record as Record<string, unknown>);
+        jsonCollector.push(record);
+        console.log(`[AG-DEBUG] collected JSON record for ${cascadeId.slice(0, 8)}`);
       } else {
         // Single export: write individual json file
         const jsonStr = formatJson([record]);
         const jsonPath = writeConversation(jsonStr, title, outputDir, '.json', ts);
+        console.log(`[AG-DEBUG] wrote JSON: ${jsonPath}`);
         postMessage({ command: 'exportDone', text: `Exported: ${path.basename(jsonPath)}` });
       }
     }
   } catch (e) {
     vscode.window.showErrorMessage(`Export failed: ${e}`);
+    throw e;  // Re-throw so caller can count failures
   }
 }
 
@@ -250,11 +266,14 @@ async function handleExportAll(): Promise<void> {
   }
 
   const config = vscode.workspace.getConfiguration('aghistory');
-  const exportFormat = config.get<string>('exportFormat', 'md');
+  const exportFormat = config.get<string>('exportFormat', 'all');
   const fieldLevel = config.get<string>('fieldLevel', 'thinking') as FieldLevel;
   const exportPath = config.get<string>('exportPath', './antigravity_export');
   const ts = getTimestamp();
-  const outputDir = path.join(resolveExportPath(exportPath), `export_${ts}`);
+  const outputDir = path.join(resolveExportPath(exportPath), `export_${ts}_${fieldLevel}`);
+
+  console.log(`[AG-DEBUG] handleExportAll: format=${exportFormat} fieldLevel=${fieldLevel} outputDir=${outputDir}`);
+  console.log(`[AG-DEBUG] handleExportAll: endpoints=${Object.keys(cachedEndpointMap).length} conversations=${cascadeIds.length}`);
 
   await vscode.window.withProgress(
     {
@@ -266,7 +285,8 @@ async function handleExportAll(): Promise<void> {
       let done = 0;
       let failed = 0;
       const total = cascadeIds.length;
-      const jsonCollector: Record<string, unknown>[] = [];
+      const jsonCollector: ConversationRecord[] = [];
+      const failedIds: string[] = [];
 
       for (const cid of cascadeIds) {
         if (token.isCancellationRequested) { break; }
@@ -278,11 +298,15 @@ async function handleExportAll(): Promise<void> {
 
         try {
           await handleExport(cid, exportFormat, outputDir, ts, jsonCollector);
-        } catch {
+        } catch (e) {
+          console.log(`[AG-DEBUG] export failed for ${cid.slice(0, 8)}: ${e}`);
+          failedIds.push(cid);
           failed++;
         }
         done++;
       }
+
+      console.log(`[AG-DEBUG] handleExportAll done: ${done - failed}/${total} ok, ${failed} failed`);
 
       // Write combined JSON file
       if ((exportFormat === 'json' || exportFormat === 'all') && jsonCollector.length > 0) {
@@ -290,6 +314,7 @@ async function handleExportAll(): Promise<void> {
         const jsonPath = path.join(outputDir, `conversations_export_${ts}.json`);
         fs.mkdirSync(outputDir, { recursive: true });
         fs.writeFileSync(jsonPath, combinedJson, 'utf-8');
+        console.log(`[AG-DEBUG] wrote combined JSON: ${jsonPath} (${jsonCollector.length} records)`);
       }
 
       // Generate export report
@@ -299,6 +324,9 @@ async function handleExportAll(): Promise<void> {
         '============================================================',
         '',
         `  Time:      ${new Date().toISOString().slice(0, 19).replace('T', ' ')}`,
+        `  Format:    ${exportFormat}`,
+        `  Level:     ${fieldLevel}`,
+        `  Output:    ${outputDir}`,
         `  Total:     ${total}`,
         `  Exported:  ${done - failed}`,
         `  Failed:    ${failed}`,
@@ -312,7 +340,8 @@ async function handleExportAll(): Promise<void> {
         const conv = cachedConversations[cid];
         const title = conv?.summary || `[unknown] ${cid.slice(0, 8)}...`;
         const steps = conv?.stepCount ?? '?';
-        reportLines.push(`  ${String(idx).padStart(3)}. ${title}`);
+        const status = failedIds.includes(cid) ? ' ❌ FAILED' : '';
+        reportLines.push(`  ${String(idx).padStart(3)}. ${title}${status}`);
         reportLines.push(`       Steps: ${steps}  |  ID: ${cid.slice(0, 8)}...`);
         idx++;
       }
@@ -322,7 +351,7 @@ async function handleExportAll(): Promise<void> {
       fs.writeFileSync(reportPath, reportLines.join('\n'), 'utf-8');
 
       const choice = await vscode.window.showInformationMessage(
-        `Exported ${done - failed} conversations to ${outputDir}`,
+        `Exported ${done - failed} conversations (${failed} failed) to ${outputDir}`,
         'Open Folder',
       );
       if (choice === 'Open Folder') {
@@ -378,6 +407,11 @@ function getWebviewHtml(webview: vscode.Webview, extensionUri: vscode.Uri): stri
       <button class="seg-btn" id="btn-collapse-all" title="Collapse All">▸ Collapse</button>
     </div>
     <button class="btn btn-icon" id="btn-refresh" title="Refresh">↻</button>
+    <select class="field-level-select" id="field-level-select" title="Export detail level">
+      <option value="default">Basic</option>
+      <option value="thinking" selected>+ Thinking</option>
+      <option value="full">Full (all)</option>
+    </select>
     <button class="btn btn-primary" id="btn-export-all">Export All</button>
   </div>
   <div class="stats-bar" id="stats-bar"></div>

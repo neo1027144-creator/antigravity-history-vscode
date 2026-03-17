@@ -16,6 +16,7 @@
   const groupWorkspaceBtn = document.getElementById('group-workspace');
   const expandAllBtn = document.getElementById('btn-expand-all');
   const collapseAllBtn = document.getElementById('btn-collapse-all');
+  const fieldLevelSelect = document.getElementById('field-level-select');
 
   // ── State ──
   let conversations = {};
@@ -32,6 +33,10 @@
 
   exportAllBtn.addEventListener('click', () => {
     vscode.postMessage({ command: 'exportAll' });
+  });
+
+  fieldLevelSelect.addEventListener('change', () => {
+    vscode.postMessage({ command: 'setFieldLevel', value: fieldLevelSelect.value });
   });
 
   searchInput.addEventListener('input', (e) => {

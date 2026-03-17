@@ -72,7 +72,7 @@ async function main() {
     external: ['vscode'],
     logLevel: 'info',
     legalComments: production ? 'none' : 'inline',
-    drop: production ? ['console', 'debugger'] : [],
+    drop: production ? ['debugger'] : [],
   });
 
   copyWebviewAssets();

@@ -1,6 +1,10 @@
 /* Antigravity History — Conversation Manager Styles */
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-family: var(--vscode-font-family, -apple-system, BlinkMacSystemFont, sans-serif);
@@ -33,8 +37,14 @@ body {
   font-size: 13px;
   outline: none;
 }
-.search-input:focus { border-color: var(--vscode-focusBorder, #007acc); }
-.search-input::placeholder { color: var(--vscode-input-placeholderForeground, #888); }
+
+.search-input:focus {
+  border-color: var(--vscode-focusBorder, #007acc);
+}
+
+.search-input::placeholder {
+  color: var(--vscode-input-placeholderForeground, #888);
+}
 
 /* ── Segmented Control ── */
 .segmented-control {
@@ -43,6 +53,7 @@ body {
   border-radius: 6px;
   overflow: hidden;
 }
+
 .seg-btn {
   padding: 5px 10px;
   border: none;
@@ -52,15 +63,18 @@ body {
   font-size: 12px;
   transition: background 0.15s, color 0.15s;
 }
+
 .seg-btn:not(:last-child) {
   border-right: 1px solid var(--vscode-input-border, #3c3c3c);
 }
+
 .seg-btn.active {
   background: var(--vscode-button-background, #0e639c);
   color: var(--vscode-button-foreground, #fff);
 }
+
 .seg-btn:hover:not(.active) {
-  background: var(--vscode-list-hoverBackground, rgba(255,255,255,0.06));
+  background: var(--vscode-list-hoverBackground, rgba(255, 255, 255, 0.06));
 }
 
 /* ── Buttons ── */
@@ -75,18 +89,47 @@ body {
   gap: 4px;
   transition: opacity 0.15s;
 }
-.btn:hover { opacity: 0.85; }
+
+.btn:hover {
+  opacity: 0.85;
+}
+
 .btn-icon {
   padding: 5px 8px;
   background: transparent;
   color: var(--vscode-foreground);
   border: 1px solid var(--vscode-input-border, #3c3c3c);
 }
+
 .btn-primary {
   background: var(--vscode-button-background, #0e639c);
   color: var(--vscode-button-foreground, #fff);
 }
-.btn-primary:hover { background: var(--vscode-button-hoverBackground, #1177bb); }
+
+.btn-primary:hover {
+  background: var(--vscode-button-hoverBackground, #1177bb);
+}
+
+/* ── Field Level Select ── */
+.field-level-select {
+  padding: 5px 8px;
+  border: 1px solid var(--vscode-input-border, #3c3c3c);
+  border-radius: 6px;
+  background: var(--vscode-input-background, #1e1e1e);
+  color: var(--vscode-input-foreground, #ccc);
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.field-level-select:focus {
+  border-color: var(--vscode-focusBorder, #007acc);
+}
+
+.field-level-select option {
+  background: var(--vscode-dropdown-background, #252526);
+  color: var(--vscode-dropdown-foreground, #ccc);
+}
 
 /* ── Stats Bar ── */
 .stats-bar {
@@ -101,16 +144,19 @@ body {
   color: var(--vscode-descriptionForeground, #888);
   margin-bottom: 12px;
 }
+
 .export-path-link {
   cursor: pointer;
   color: var(--vscode-textLink-foreground, #3794ff);
   text-decoration: underline;
   text-decoration-style: dotted;
 }
+
 .export-path-link:hover {
   color: var(--vscode-textLink-activeForeground, #3794ff);
   text-decoration-style: solid;
 }
+
 .export-path-btn {
   font-size: 10px;
   padding: 1px 6px;
@@ -121,8 +167,9 @@ body {
   cursor: pointer;
   margin-left: 4px;
 }
+
 .export-path-btn:hover {
-  background: var(--vscode-list-hoverBackground, rgba(255,255,255,0.06));
+  background: var(--vscode-list-hoverBackground, rgba(255, 255, 255, 0.06));
   color: var(--vscode-foreground);
 }
 
@@ -135,18 +182,24 @@ body {
   margin-bottom: 12px;
   transition: opacity 0.5s;
 }
-.recover-banner.fade-out { opacity: 0; }
+
+.recover-banner.fade-out {
+  opacity: 0;
+}
+
 .recover-text {
   font-size: 12px;
   color: var(--vscode-foreground);
   margin-bottom: 6px;
 }
+
 .recover-bar-bg {
   height: 4px;
   background: var(--vscode-panel-border, #2d2d2d);
   border-radius: 2px;
   overflow: hidden;
 }
+
 .recover-bar-fill {
   height: 100%;
   background: var(--vscode-notificationsInfoIcon-foreground, #3794ff);
@@ -155,7 +208,10 @@ body {
 }
 
 /* ── Date Group ── */
-.date-group { margin-bottom: 12px; }
+.date-group {
+  margin-bottom: 12px;
+}
+
 .date-group-header {
   font-size: 12px;
   font-weight: 600;
@@ -170,26 +226,47 @@ body {
   border-radius: 4px 4px 0 0;
   transition: background 0.15s;
 }
+
 .date-group-header:hover {
-  background: var(--vscode-list-hoverBackground, rgba(255,255,255,0.04));
+  background: var(--vscode-list-hoverBackground, rgba(255, 255, 255, 0.04));
 }
+
 .group-arrow {
   display: inline-block;
   width: 12px;
   font-size: 11px;
 }
-.date-group-count { font-weight: 400; opacity: 0.7; }
-.group-items { transition: max-height 0.2s ease; }
-.group-items.collapsed { display: none; }
+
+.date-group-count {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.group-items {
+  transition: max-height 0.2s ease;
+}
+
+.group-items.collapsed {
+  display: none;
+}
 
 /* ── Status Dot ── */
 .status-dot {
   font-size: 10px;
   margin-top: 5px;
 }
-.status-dot.active { color: #4ec94e; }
-.status-dot.completed { color: var(--vscode-descriptionForeground, #666); }
-.status-dot.idle { color: var(--vscode-descriptionForeground, #555); }
+
+.status-dot.active {
+  color: #4ec94e;
+}
+
+.status-dot.completed {
+  color: var(--vscode-descriptionForeground, #666);
+}
+
+.status-dot.idle {
+  color: var(--vscode-descriptionForeground, #555);
+}
 
 /* ── Conversation Card ── */
 .conv-card {
@@ -202,12 +279,23 @@ body {
   align-items: flex-start;
   gap: 10px;
 }
+
 .conv-card:hover {
   border-color: var(--vscode-focusBorder, #007acc);
-  background: var(--vscode-list-hoverBackground, rgba(255,255,255,0.04));
+  background: var(--vscode-list-hoverBackground, rgba(255, 255, 255, 0.04));
 }
-.conv-icon { flex-shrink: 0; width: 16px; text-align: center; }
-.conv-info { flex: 1; min-width: 0; }
+
+.conv-icon {
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+}
+
+.conv-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .conv-title {
   font-weight: 600;
   font-size: 14px;
@@ -216,12 +304,17 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .conv-meta {
   font-size: 11px;
   color: var(--vscode-descriptionForeground, #888);
   margin-top: 1px;
 }
-.conv-created { opacity: 0.7; }
+
+.conv-created {
+  opacity: 0.7;
+}
+
 .conv-workspace {
   font-size: 11px;
   color: var(--vscode-descriptionForeground, #666);
@@ -234,9 +327,10 @@ body {
   padding: 1px 4px;
   margin-left: -4px;
 }
+
 .conv-workspace:hover {
   color: var(--vscode-textLink-foreground, #3794ff);
-  background: var(--vscode-list-hoverBackground, rgba(255,255,255,0.04));
+  background: var(--vscode-list-hoverBackground, rgba(255, 255, 255, 0.04));
 }
 
 /* ── Card Actions ── */
@@ -246,6 +340,7 @@ body {
   flex-shrink: 0;
   align-items: center;
 }
+
 .btn-export {
   padding: 3px 8px;
   font-size: 11px;
@@ -257,10 +352,12 @@ body {
   font-weight: 500;
   transition: background 0.15s;
 }
+
 .btn-export:hover {
   background: var(--vscode-button-background, #0e639c);
   color: var(--vscode-button-foreground, #fff);
 }
+
 .btn-copy {
   padding: 3px 6px;
   background: transparent;
@@ -270,8 +367,9 @@ body {
   border-radius: 4px;
   transition: background 0.15s;
 }
+
 .btn-copy:hover {
-  background: var(--vscode-list-hoverBackground, rgba(255,255,255,0.08));
+  background: var(--vscode-list-hoverBackground, rgba(255, 255, 255, 0.08));
 }
 
 /* ── Empty State ── */
@@ -280,13 +378,19 @@ body {
   padding: 60px 20px;
   color: var(--vscode-descriptionForeground, #888);
 }
-.empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
 .empty-state-title {
   font-size: 18px;
   font-weight: 600;
   color: var(--vscode-foreground);
   margin-bottom: 8px;
 }
+
 .empty-state-desc {
   font-size: 13px;
   margin-bottom: 16px;
@@ -296,22 +400,34 @@ body {
 }
 
 /* ── Loading ── */
-.loading { text-align: center; padding: 40px; color: var(--vscode-descriptionForeground, #888); }
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--vscode-descriptionForeground, #888);
+}
+
 .spinner {
   display: inline-block;
-  width: 24px; height: 24px;
+  width: 24px;
+  height: 24px;
   border: 2px solid var(--vscode-panel-border, #444);
   border-top-color: var(--vscode-focusBorder, #007acc);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 8px;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* ── Toast ── */
 .toast {
   position: fixed;
-  bottom: 16px; right: 16px;
+  bottom: 16px;
+  right: 16px;
   padding: 8px 16px;
   border-radius: 6px;
   font-size: 12px;
@@ -321,4 +437,7 @@ body {
   transition: opacity 0.3s;
   pointer-events: none;
 }
-.toast.show { opacity: 1; }
+
+.toast.show {
+  opacity: 1;
+}
