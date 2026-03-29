@@ -2,7 +2,7 @@
   "name": "antigravity-history",
   "displayName": "Antigravity History - Browse & Export AI Chat",
   "description": "Browse, search, and export your Antigravity AI conversations — with full fidelity. View AI thinking chains, code diffs, and command outputs in a beautiful chat UI.",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "publisher": "neo1027144",
   "license": "Apache-2.0",
   "icon": "resources/icon.png",

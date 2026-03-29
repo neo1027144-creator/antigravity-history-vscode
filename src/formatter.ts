@@ -174,7 +174,7 @@ export function writeConversation(
   extension = '.md',
   timestamp?: string,
 ): string {
-  const base = safeFilename(title);
+  const base = safeFilename(title, 100);
   const suffix = timestamp ? `_${timestamp}` : '';
   let filepath = path.join(outputDir, base + suffix + extension);
 
