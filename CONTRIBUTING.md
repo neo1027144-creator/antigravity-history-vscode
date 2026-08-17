@@ -4,7 +4,7 @@ Thanks for your interest in contributing! This project is open source under the 
 
 ## Ways to Contribute
 
-- 🐛 **Report Bugs** — [Open an issue](https://github.com/neo1027144-creator/antigravity-history-vscode/issues) with steps to reproduce
+- 🐛 **Report Bugs** — [Open an issue](https://github.com/yunfenghello/antigravity-history-vscode/issues) with steps to reproduce
 - 💡 **Suggest Features** — Share your ideas via issues
 - 📝 **Improve Docs** — Fix typos, clarify instructions, add examples
 - 💻 **Submit Code** — Bug fixes, new features, or performance improvements
@@ -12,7 +12,7 @@ Thanks for your interest in contributing! This project is open source under the 
 ## Development Setup
 
 ```bash
-git clone https://github.com/neo1027144-creator/antigravity-history-vscode.git
+git clone https://github.com/yunfenghello/antigravity-history-vscode.git
 cd antigravity-history-vscode
 npm install
 npm run build

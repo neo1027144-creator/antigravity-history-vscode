@@ -4,7 +4,7 @@
 
 [![OpenVSX](https://img.shields.io/open-vsx/dt/neo1027144/antigravity-history?label=OpenVSX%20Downloads&color=blueviolet)](https://open-vsx.org/extension/neo1027144/antigravity-history)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/neo1027144-creator/antigravity-history-vscode?style=social)](https://github.com/neo1027144-creator/antigravity-history-vscode)
+[![GitHub Stars](https://img.shields.io/github/stars/yunfenghello/antigravity-history-vscode?style=social)](https://github.com/yunfenghello/antigravity-history-vscode)
 
 > ⚠️ **重要提示：** 使用本插件前，请确保你的 **Antigravity IDE 已升级到最新版本**。旧版本可能导致「Client is not running」错误，无法加载对话列表。👉 [**下载 / 更新 Antigravity**](https://antigravity.google/releases)
 
@@ -48,13 +48,13 @@
 ## 安装方式
 
 ### 手动安装（VSIX）
-1. 从 [Releases](https://github.com/neo1027144-creator/antigravity-history-vscode/releases) 下载 `.vsix` 文件
+1. 从 [Releases](https://github.com/yunfenghello/antigravity-history-vscode/releases) 下载 `.vsix` 文件
 2. 在 VS Code / Antigravity 中：`Ctrl+Shift+P` → `Install from VSIX`
 
 ### 从 OpenVSX 安装
 在扩展面板搜索 **"Antigravity History"**，或执行：
 ```
-ext install neo1027144.antigravity-history
+ext install yunfenghello.antigravity-history
 ```
 
 ## 使用方法
@@ -86,7 +86,9 @@ ext install neo1027144.antigravity-history
 
 ## 相关项目
 
-- **[antigravity-history](https://github.com/neo1027144-creator/antigravity-history)** — 命令行版对话导出工具（PyPI: `pip install antigravity-history`）
+## 致谢 (Acknowledgements)
+
+- 感谢原作者 **Neo** ([@neo1027144-creator](https://github.com/neo1027144-creator)) 提供的初始项目架构与开源贡献。
 
 ## 许可证
 

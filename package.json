@@ -1,14 +1,14 @@
 {
   "name": "antigravity-history",
-  "displayName": "Antigravity History - Browse & Export AI Chat",
-  "description": "Browse, search, and export your Antigravity AI conversations — with full fidelity. View AI thinking chains, code diffs, and command outputs in a beautiful chat UI.",
-  "version": "0.2.1",
-  "publisher": "neo1027144",
+  "displayName": "%extension.displayName%",
+  "description": "%extension.description%",
+  "version": "0.2.6",
+  "publisher": "yunfenghello",
   "license": "Apache-2.0",
   "icon": "resources/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/neo1027144-creator/antigravity-history-vscode"
+    "url": "https://github.com/yunfenghello/antigravity-history-vscode"
   },
   "engines": {
     "vscode": "^1.85.0"
@@ -47,25 +47,25 @@
     "commands": [
       {
         "command": "aghistory.openPanel",
-        "title": "Open Antigravity History",
+        "title": "%command.openPanel%",
         "icon": "$(history)",
         "category": "Antigravity History"
       },
       {
         "command": "aghistory.refresh",
-        "title": "Refresh Conversations",
+        "title": "%command.refresh%",
         "icon": "$(refresh)",
         "category": "Antigravity History"
       },
       {
         "command": "aghistory.export",
-        "title": "Export Conversation",
+        "title": "%command.export%",
         "icon": "$(cloud-download)",
         "category": "Antigravity History"
       },
       {
         "command": "aghistory.exportAll",
-        "title": "Export All Conversations",
+        "title": "%command.exportAll%",
         "icon": "$(cloud-download)",
         "category": "Antigravity History"
       }
@@ -73,10 +73,23 @@
     "configuration": {
       "title": "Antigravity History",
       "properties": {
+        "aghistory.language": {
+          "type": "string",
+          "enum": [
+            "zh-CN",
+            "en"
+          ],
+          "enumDescriptions": [
+            "%config.language.zhCN%",
+            "%config.language.en%"
+          ],
+          "default": "zh-CN",
+          "description": "%config.language%"
+        },
         "aghistory.exportPath": {
           "type": "string",
           "default": "./antigravity_export",
-          "description": "Default export directory path"
+          "description": "%config.exportPath%"
         },
         "aghistory.exportFormat": {
           "type": "string",
@@ -86,7 +99,7 @@
             "all"
           ],
           "default": "all",
-          "description": "Default export format"
+          "description": "%config.exportFormat%"
         },
         "aghistory.fieldLevel": {
           "type": "string",
@@ -96,7 +109,29 @@
             "full"
           ],
           "default": "thinking",
-          "description": "Export detail level: default (messages only), thinking (+ AI reasoning), full (+ diffs, outputs)"
+          "description": "%config.fieldLevel%"
+        },
+        "aghistory.exportStrategy": {
+          "type": "string",
+          "enum": [
+            "workspace",
+            "unified"
+          ],
+          "default": "workspace",
+          "description": "%config.exportStrategy%"
+        },
+        "aghistory.singleExportMode": {
+          "type": "string",
+          "enum": [
+            "dialog",
+            "direct"
+          ],
+          "enumDescriptions": [
+            "%config.singleExportMode.dialog%",
+            "%config.singleExportMode.direct%"
+          ],
+          "default": "dialog",
+          "description": "%config.singleExportMode%"
         }
       }
     }

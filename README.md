@@ -4,7 +4,7 @@
 
 [![OpenVSX](https://img.shields.io/open-vsx/dt/neo1027144/antigravity-history?label=OpenVSX%20Downloads&color=blueviolet)](https://open-vsx.org/extension/neo1027144/antigravity-history)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/neo1027144-creator/antigravity-history-vscode?style=social)](https://github.com/neo1027144-creator/antigravity-history-vscode)
+[![GitHub Stars](https://img.shields.io/github/stars/yunfenghello/antigravity-history-vscode?style=social)](https://github.com/yunfenghello/antigravity-history-vscode)
 
 > ⚠️ **Important:** Please make sure your **Antigravity IDE is updated to the latest version** before using this extension. Older versions may cause "Client is not running" errors and prevent conversations from loading. 👉 [**Download / Update Antigravity**](https://antigravity.google/releases)
 
@@ -48,13 +48,13 @@
 ## Installation
 
 ### From VSIX (Manual)
-1. Download the `.vsix` file from [Releases](https://github.com/neo1027144-creator/antigravity-history-vscode/releases)
+1. Download the `.vsix` file from [Releases](https://github.com/yunfenghello/antigravity-history-vscode/releases)
 2. In VS Code / Antigravity: `Ctrl+Shift+P` → `Install from VSIX`
 
 ### From OpenVSX
 Search **"Antigravity History"** in the Extensions panel, or run:
 ```
-ext install neo1027144.antigravity-history
+ext install yunfenghello.antigravity-history
 ```
 
 ## Usage
@@ -86,7 +86,9 @@ ext install neo1027144.antigravity-history
 
 ## Related
 
-- **[antigravity-history](https://github.com/neo1027144-creator/antigravity-history)** — CLI tool for Antigravity conversation export (PyPI: `pip install antigravity-history`)
+## Acknowledgements
+
+- Special thanks to the original author **Neo** ([@neo1027144-creator](https://github.com/neo1027144-creator)) for the initial project architecture and open source contribution.
 
 ## License
 

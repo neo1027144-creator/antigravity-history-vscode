@@ -1,0 +1,18 @@
+{
+  "extension.displayName": "Antigravity History - Browse & Export",
+  "extension.description": "Browse, search, and export Antigravity AI conversation history with full reasoning chain, workspace categorization, and multi-format support.",
+  "command.openPanel": "Open Antigravity History",
+  "command.refresh": "Refresh Conversations",
+  "command.export": "Export Conversation",
+  "command.exportAll": "Export All Conversations",
+  "config.language": "Display language for Antigravity History UI and exports",
+  "config.language.zhCN": "Simplified Chinese (简体中文)",
+  "config.language.en": "English",
+  "config.exportPath": "Default export directory path",
+  "config.exportFormat": "Default export format (Markdown, JSON, or both)",
+  "config.fieldLevel": "Export detail level: default (messages only), thinking (+ AI reasoning), full (+ diffs, outputs)",
+  "config.exportStrategy": "Export organization strategy: workspace (group by conversation project), unified (single export folder)",
+  "config.singleExportMode": "Single conversation export mode: Save Dialog or Direct Export",
+  "config.singleExportMode.dialog": "Save Dialog (Prompt to choose directory and filename)",
+  "config.singleExportMode.direct": "Direct Export (Silently save to default or project folder)"
+}

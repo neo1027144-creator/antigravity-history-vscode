@@ -1,0 +1,18 @@
+{
+  "extension.displayName": "Antigravity History - 历史记录浏览与导出",
+  "extension.description": "浏览、搜索并导出 Antigravity AI 对话历史记录，支持 2.5.5+ 新版架构、按项目工作区归类导出及完整思维链展示。",
+  "command.openPanel": "打开 Antigravity 历史记录",
+  "command.refresh": "刷新会话列表",
+  "command.export": "导出指定会话",
+  "command.exportAll": "批量导出所有会话",
+  "config.language": "Antigravity History 界面与导出的显示语言",
+  "config.language.zhCN": "简体中文 (zh-CN)",
+  "config.language.en": "English (en)",
+  "config.exportPath": "默认导出目录路径",
+  "config.exportFormat": "默认导出格式 (Markdown、JSON 或全部导出)",
+  "config.fieldLevel": "导出详情级别：default (仅对话消息)、thinking (+ 包含思考过程)、full (+ 包含Diff与终端输出)",
+  "config.exportStrategy": "导出归属模式：workspace (按所属项目工作区归类)、unified (统一平铺到导出主目录)",
+  "config.singleExportMode": "单条会话导出模式：另存为弹窗模式或直接静默导出模式",
+  "config.singleExportMode.dialog": "另存为弹窗模式 (点击后选择保存目录与文件名)",
+  "config.singleExportMode.direct": "直接静默导出 (自动保存至默认或项目导出目录)"
+}
