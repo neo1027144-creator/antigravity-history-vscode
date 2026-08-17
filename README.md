@@ -86,7 +86,9 @@ ext install yunfenghello.antigravity-history
 
 ## Related
 
-- **[antigravity-history](https://github.com/neo1027144-creator/antigravity-history)** — CLI tool for Antigravity conversation export (PyPI: `pip install antigravity-history`)
+## Acknowledgements
+
+- Special thanks to the original author **Neo** ([@neo1027144-creator](https://github.com/neo1027144-creator)) for the initial project architecture and open source contribution.
 
 ## License
 

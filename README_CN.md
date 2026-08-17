@@ -86,7 +86,9 @@ ext install yunfenghello.antigravity-history
 
 ## 相关项目
 
-- **[antigravity-history](https://github.com/neo1027144-creator/antigravity-history)** — 命令行版对话导出工具（PyPI: `pip install antigravity-history`）
+## 致谢 (Acknowledgements)
+
+- 感谢原作者 **Neo** ([@neo1027144-creator](https://github.com/neo1027144-creator)) 提供的初始项目架构与开源贡献。
 
 ## 许可证
 
