@@ -33,6 +33,9 @@
       fieldThinking: '+ 思考过程',
       fieldFull: '完整数据 (含Diff与终端)',
       fieldLevelTitle: '导出详情级别',
+      singleExportModeTitle: '单条导出模式',
+      singleExportDialog: '另存为弹窗',
+      singleExportDirect: '直接保存',
       langTitle: '界面语言 / Language',
       exportAll: '全部导出',
       exportTo: '导出至:',
@@ -49,8 +52,8 @@
       noWorkspace: '未关联工作区',
       openFolderTooltip: '在文件资源管理器中打开项目目录: {0}',
       openConvDataTooltip: '在文件资源管理器中打开会话存储目录: {0}',
-      exportMdTooltip: '选择保存为 Markdown',
-      exportJsonTooltip: '选择保存为 JSON',
+      exportMdTooltip: '导出 Markdown',
+      exportJsonTooltip: '导出 JSON',
       copyIdTooltip: '复制会话 ID',
       preparingExportMd: '准备导出 Markdown...',
       preparingExportJson: '准备导出 JSON...',
@@ -82,6 +85,9 @@
       fieldThinking: '+ Thinking Process',
       fieldFull: 'Full Data (Diffs & Outputs)',
       fieldLevelTitle: 'Export Detail Level',
+      singleExportModeTitle: 'Single Export Mode',
+      singleExportDialog: 'Save Dialog',
+      singleExportDirect: 'Direct Export',
       langTitle: 'Language / 语言',
       exportAll: 'Export All',
       exportTo: 'Export to:',
@@ -98,8 +104,8 @@
       noWorkspace: 'Unassociated Workspace',
       openFolderTooltip: 'Open project folder in File Explorer: {0}',
       openConvDataTooltip: 'Open conversation data folder in File Explorer: {0}',
-      exportMdTooltip: 'Save as Markdown',
-      exportJsonTooltip: 'Save as JSON',
+      exportMdTooltip: 'Export Markdown',
+      exportJsonTooltip: 'Export JSON',
       copyIdTooltip: 'Copy Conversation ID',
       preparingExportMd: 'Preparing Markdown export...',
       preparingExportJson: 'Preparing JSON export...',
@@ -150,6 +156,7 @@
   const collapseAllBtn = document.getElementById('btn-collapse-all');
   const fieldLevelSelect = document.getElementById('field-level-select');
   const exportStrategySelect = document.getElementById('export-strategy-select');
+  const singleExportModeSelect = document.getElementById('single-export-mode-select');
   const langSelect = document.getElementById('lang-select');
 
   // ── 内部状态 ──
@@ -189,6 +196,14 @@
       const optUni = exportStrategySelect.querySelector('option[value="unified"]');
       if (optWs) optWs.textContent = t('strategyWorkspace');
       if (optUni) optUni.textContent = t('strategyUnified');
+    }
+
+    if (singleExportModeSelect) {
+      singleExportModeSelect.title = t('singleExportModeTitle');
+      const optDlg = singleExportModeSelect.querySelector('option[value="dialog"]');
+      const optDir = singleExportModeSelect.querySelector('option[value="direct"]');
+      if (optDlg) optDlg.textContent = t('singleExportDialog');
+      if (optDir) optDir.textContent = t('singleExportDirect');
     }
 
     if (fieldLevelSelect) {
@@ -246,6 +261,12 @@
   if (exportStrategySelect) {
     exportStrategySelect.addEventListener('change', () => {
       vscode.postMessage({ command: 'setExportStrategy', value: exportStrategySelect.value });
+    });
+  }
+
+  if (singleExportModeSelect) {
+    singleExportModeSelect.addEventListener('change', () => {
+      vscode.postMessage({ command: 'setSingleExportMode', value: singleExportModeSelect.value });
     });
   }
 
@@ -338,6 +359,11 @@
       case 'setExportStrategy':
         if (msg.strategy && exportStrategySelect) {
           exportStrategySelect.value = msg.strategy;
+        }
+        break;
+      case 'setSingleExportMode':
+        if (msg.mode && singleExportModeSelect) {
+          singleExportModeSelect.value = msg.mode;
         }
         break;
     }

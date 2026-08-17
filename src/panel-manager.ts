@@ -156,9 +156,13 @@ export function openPanel(context: vscode.ExtensionContext): void {
         case 'refresh':
           await handleRefresh();
           break;
-        case 'export':
-          await handleExport(message.cascadeId, message.format, undefined, undefined, undefined, true);
+        case 'export': {
+          const config = vscode.workspace.getConfiguration('aghistory');
+          const singleMode = config.get<string>('singleExportMode', 'dialog');
+          const isInteractive = singleMode !== 'direct';
+          await handleExport(message.cascadeId, message.format, undefined, undefined, undefined, isInteractive);
           break;
+        }
         case 'exportAll':
           await handleExportAll();
           break;
@@ -206,6 +210,14 @@ export function openPanel(context: vscode.ExtensionContext): void {
           if (['workspace', 'unified'].includes(val)) {
             await vscode.workspace.getConfiguration('aghistory').update('exportStrategy', val, true);
             postMessage({ command: 'setExportStrategy', strategy: val });
+          }
+          break;
+        }
+        case 'setSingleExportMode': {
+          const val = message.value;
+          if (val === 'dialog' || val === 'direct') {
+            await vscode.workspace.getConfiguration('aghistory').update('singleExportMode', val, true);
+            postMessage({ command: 'setSingleExportMode', mode: val });
           }
           break;
         }
@@ -289,8 +301,10 @@ async function handleRefresh(): Promise<void> {
     const config = vscode.workspace.getConfiguration('aghistory');
     const exportDir = resolveExportPath(config.get<string>('exportPath', './antigravity_export'));
     const exportStrategy = config.get<string>('exportStrategy', 'workspace');
+    const singleExportMode = config.get<string>('singleExportMode', 'dialog');
     postMessage({ command: 'setExportPath', path: exportDir });
     postMessage({ command: 'setExportStrategy', strategy: exportStrategy });
+    postMessage({ command: 'setSingleExportMode', mode: singleExportMode });
 
     // 步骤 2：扫描运行中的 LanguageServer 进程并获取当前已索引的会话
     const result = await discoverAndListAll();
@@ -700,6 +714,10 @@ function getWebviewHtml(webview: vscode.Webview, extensionUri: vscode.Uri): stri
     <select class="field-level-select" id="export-strategy-select" title="导出归属模式">
       <option value="workspace" selected>按所属项目归类</option>
       <option value="unified">统一导出目录</option>
+    </select>
+    <select class="field-level-select" id="single-export-mode-select" title="单条导出模式">
+      <option value="dialog" selected>另存为弹窗</option>
+      <option value="direct">直接保存</option>
     </select>
     <select class="field-level-select" id="field-level-select" title="导出详情级别">
       <option value="default">基础对话</option>

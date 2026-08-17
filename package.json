@@ -119,6 +119,19 @@
           ],
           "default": "workspace",
           "description": "%config.exportStrategy%"
+        },
+        "aghistory.singleExportMode": {
+          "type": "string",
+          "enum": [
+            "dialog",
+            "direct"
+          ],
+          "enumDescriptions": [
+            "%config.singleExportMode.dialog%",
+            "%config.singleExportMode.direct%"
+          ],
+          "default": "dialog",
+          "description": "%config.singleExportMode%"
         }
       }
     }

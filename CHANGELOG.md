@@ -5,6 +5,9 @@ All notable changes to the "Antigravity History" extension will be documented in
 ## [0.2.6] - 2026-08-17
 
 ### Added
+- **单条导出双模切换（另存为弹窗 / 直接静默保存）**：
+  - 新增 `aghistory.singleExportMode` 配置项（`dialog` 另存为弹窗 / `direct` 直接保存）。
+  - Webview 控制栏新增单条导出模式下拉切换，支持在“点击 MD/JSON 弹出系统保存窗口”与“点击直接保存至默认/工作区目录”之间一键切换。
 - **多语言国际化 (i18n) 与动态语言切换**：
   - 完整支持简体中文 (`zh-CN`，默认) 与英语 (`en`) 双语自由切换。
   - Webview 顶部控制栏新增语言下拉选择器，切换即时重绘，无需重启插件或重载窗口。

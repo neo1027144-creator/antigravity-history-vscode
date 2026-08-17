@@ -11,5 +11,8 @@
   "config.exportPath": "默认导出目录路径",
   "config.exportFormat": "默认导出格式 (Markdown、JSON 或全部导出)",
   "config.fieldLevel": "导出详情级别：default (仅对话消息)、thinking (+ 包含思考过程)、full (+ 包含Diff与终端输出)",
-  "config.exportStrategy": "导出归属模式：workspace (按所属项目工作区归类)、unified (统一平铺到导出主目录)"
+  "config.exportStrategy": "导出归属模式：workspace (按所属项目工作区归类)、unified (统一平铺到导出主目录)",
+  "config.singleExportMode": "单条会话导出模式：另存为弹窗模式或直接静默导出模式",
+  "config.singleExportMode.dialog": "另存为弹窗模式 (点击后选择保存目录与文件名)",
+  "config.singleExportMode.direct": "直接静默导出 (自动保存至默认或项目导出目录)"
 }
