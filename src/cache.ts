@@ -1,8 +1,11 @@
 /**
- * Local JSON cache for conversation summaries.
+ * 会话摘要本地缓存管理模块
  *
- * Provides instant UI on IDE restart by caching the last known conversation list.
- * Cache is updated after every successful API refresh.
+ * 核心功能：
+ * - 缓存最近一次成功获取的会话列表，实现 IDE 重启后的秒级极速渲染
+ * - 在每次成功 API 刷新后增量更新本地 JSON 缓存文件
+ *
+ * 作者/更新时间: fengyun / 2026-08-14
  */
 
 import * as fs from 'fs';

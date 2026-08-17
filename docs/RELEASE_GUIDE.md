@@ -131,7 +131,7 @@ https://open-vsx.org/extension/neo1027144/antigravity-history
 ### 2. GitHub Release（公开仓库）
 
 ```
-https://github.com/neo1027144-creator/antigravity-history-vscode/releases
+https://github.com/yunfenghello/antigravity-history-vscode/releases
 ```
 
 确认新版本的 Release 已创建，`.vsix` 文件已上传。
@@ -139,7 +139,7 @@ https://github.com/neo1027144-creator/antigravity-history-vscode/releases
 ### 3. 公开仓库代码同步
 
 ```
-https://github.com/neo1027144-creator/antigravity-history-vscode
+https://github.com/yunfenghello/antigravity-history-vscode
 ```
 
 确认最新 commit 已同步，commit message 与私有仓库一致。
@@ -151,7 +151,7 @@ https://github.com/neo1027144-creator/antigravity-history-vscode
 curl -s https://open-vsx.org/api/neo1027144/antigravity-history/latest | python -c "import sys,json;print(json.load(sys.stdin)['version'])"
 
 # 检查 GitHub Release
-curl -s https://api.github.com/repos/neo1027144-creator/antigravity-history-vscode/releases/latest | python -c "import sys,json;print(json.load(sys.stdin)['tag_name'])"
+curl -s https://api.github.com/repos/yunfenghello/antigravity-history-vscode/releases/latest | python -c "import sys,json;print(json.load(sys.stdin)['tag_name'])"
 ```
 
 ---
